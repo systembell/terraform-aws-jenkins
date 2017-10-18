@@ -38,6 +38,7 @@ module "elastic_beanstalk_environment" {
   vpc_id                       = "${var.vpc_id}"
   public_subnets               = "${var.public_subnets}"
   private_subnets              = "${var.private_subnets}"
+  associate_public_ip_address  = "${var.associate_public_ip_address}"
   security_groups              = "${var.security_groups}"
   keypair                      = "${var.ssh_key_pair}"
   solution_stack_name          = "${var.solution_stack_name}"

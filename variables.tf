@@ -76,6 +76,11 @@ variable "private_subnets" {
   description = "List of private subnets to place EC2 instances and EFS"
 }
 
+variable "associate_public_ip_address" {
+  description = "Specifies whether to launch instances in your VPC with public IP addresses. Instances with public IP addresses do not require a NAT device to communicate with the Internet, but must be on a public subnet."
+  default = "false"
+}
+
 variable "zone_id" {
   type        = "string"
   description = "Route53 parent zone ID. The module will create sub-domain DNS records in the parent zone for the EB environment and EFS"
