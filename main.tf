@@ -85,7 +85,7 @@ module "efs" {
   zone_id            = "${var.zone_id}"
 
   # EC2 instances (from `elastic_beanstalk_environment`) and DataPipeline instances (from `efs_backup`) are allowed to connect to the EFS
-  security_groups = ["${module.elastic_beanstalk_environment.security_group_id}", "${module.efs_backup.security_group_id}"]
+  security_groups = ["${module.elastic_beanstalk_environment.security_group_id}"]
 
   delimiter  = "${var.delimiter}"
   attributes = ["${compact(concat(var.attributes, list("efs")))}"]
@@ -93,23 +93,23 @@ module "efs" {
 }
 
 # EFS backup to S3
-module "efs_backup" {
-  source                             = "git::https://github.com/cloudposse/terraform-aws-efs-backup.git?ref=tags/0.9.0"
-  name                               = "${var.name}"
-  stage                              = "${var.stage}"
-  namespace                          = "${var.namespace}"
-  region                             = "${var.aws_region}"
-  vpc_id                             = "${var.vpc_id}"
-  efs_mount_target_id                = "${element(module.efs.mount_target_ids, 0)}"
-  use_ip_address                     = "${var.use_efs_ip_address}"
-  noncurrent_version_expiration_days = "${var.noncurrent_version_expiration_days}"
-  ssh_key_pair                       = "${var.ssh_key_pair}"
-  modify_security_group              = "false"
-  datapipeline_config                = "${var.datapipeline_config}"
-  delimiter                          = "${var.delimiter}"
-  attributes                         = ["${compact(concat(var.attributes, list("efs-backup")))}"]
-  tags                               = "${var.tags}"
-}
+# module "efs_backup" {
+#   source                             = "git::https://github.com/cloudposse/terraform-aws-efs-backup.git?ref=tags/0.9.0"
+#   name                               = "${var.name}"
+#   stage                              = "${var.stage}"
+#   namespace                          = "${var.namespace}"
+#   region                             = "${var.aws_region}"
+#   vpc_id                             = "${var.vpc_id}"
+#   efs_mount_target_id                = "${element(module.efs.mount_target_ids, 0)}"
+#   use_ip_address                     = "${var.use_efs_ip_address}"
+#   noncurrent_version_expiration_days = "${var.noncurrent_version_expiration_days}"
+#   ssh_key_pair                       = "${var.ssh_key_pair}"
+#   modify_security_group              = "false"
+#   datapipeline_config                = "${var.datapipeline_config}"
+#   delimiter                          = "${var.delimiter}"
+#   attributes                         = ["${compact(concat(var.attributes, list("efs-backup")))}"]
+#   tags                               = "${var.tags}"
+# }
 
 # CodePipeline/CodeBuild to build Jenkins Docker image, store it to a ECR repo, and deploy it to Elastic Beanstalk running Docker stack
 module "cicd" {
